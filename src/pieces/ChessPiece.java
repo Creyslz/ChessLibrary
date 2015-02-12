@@ -3,7 +3,7 @@ import main.Chessboard;
 
 public abstract class ChessPiece {
 	private char alignment;
-	private int lastTurnMoved;
+	private double lastTurnMoved;
 	private int row;
 	private int col;
 	private boolean isAlive;
@@ -29,10 +29,10 @@ public abstract class ChessPiece {
 	}
 
 	// Necessary getters and setters
-	public int getLastTurnMoved() {
+	public double getLastTurnMoved() {
 		return lastTurnMoved;
 	}
-	public void setLastTurnMoved(int lastTurnMoved) {
+	public void setLastTurnMoved(double lastTurnMoved) {
 		this.lastTurnMoved = lastTurnMoved;
 	}
 	public int getRow() {
@@ -80,6 +80,10 @@ public abstract class ChessPiece {
 	// Checks for the piece can move to the desired position on the board.
 	public abstract boolean canMoveTo(int row, int col, int[][] board);
 	
+	// Check if the piece can threaten a position on the board. 
+	// Basically checks for valid movement but disregards if there is a piece on the target.
+	public abstract boolean canThreaten(int row, int col, int[][] board);
+	
 	public boolean isWithinBounds(int row, int col) {
 		if(row < 0 || row >= curBoard.getMaxRows() || col < 0 || col < curBoard.getMaxCols())
 			return false;
@@ -88,7 +92,7 @@ public abstract class ChessPiece {
 	
 	// Forces the piece to move to a position
 	// Does NOT check for the correctness of the move
-	void moveTo(int row, int col)
+	public void moveTo(int row, int col)
 	{
 		this.row = row;
 		this.col = col;
@@ -114,7 +118,7 @@ public abstract class ChessPiece {
 		int row = startRow + rowDirection;
 		int col = startCol + colDirection;
 		
-		while(row != endRow && col != endCol) {
+		while(row != endRow || col != endCol) {
 			if(board[row][col] != 0)
 				return false;
 			row += rowDirection;
@@ -132,5 +136,7 @@ public abstract class ChessPiece {
 			return true;
 		return Math.signum(board[targetRow][targetCol]) != this.getAlignmentDirection();
 	}
+	
+
 	
 }

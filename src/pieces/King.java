@@ -12,17 +12,27 @@ public class King extends ChessPiece {
 	@Override
 	public boolean canMoveTo(int row, int col, int[][] board) {
 		int rowDifference = row - this.getRow();
-		int colDifference = row - this.getCol();
+		int colDifference = col - this.getCol();
 		
 		if(Math.abs(rowDifference) > 1 || Math.abs(colDifference) > 1)
 				return false;
 		
 		//check for check
 		char otherColor = this.getOpposingAlignment();
-		return this.getBoard().isPositionThreatened(row, col, otherColor);
+		return !this.getBoard().isPositionThreatened(row, col, otherColor) && this.canCapture(row, col, board);
 		
 		//Add castling later
 		
+	}
+
+	@Override
+	public boolean canThreaten(int row, int col, int[][] board) {
+		int rowDifference = row - this.getRow();
+		int colDifference = col - this.getCol();
+		
+		if(Math.abs(rowDifference) > 1 || Math.abs(colDifference) > 1)
+				return false;
+		return true;
 	}
 
 }

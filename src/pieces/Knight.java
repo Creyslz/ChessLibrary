@@ -12,12 +12,25 @@ public class Knight extends ChessPiece {
 	@Override
 	public boolean canMoveTo(int row, int col, int[][] board) {
 		int rowDifference = row - this.getRow();
-		int colDifference = row - this.getCol();
+		int colDifference = col - this.getCol();
 		
 		if(Math.abs(rowDifference) == 2 && Math.abs(colDifference) == 1) {
 			return canCapture(row, col, board);
 		} else if (Math.abs(rowDifference) == 1 && Math.abs(colDifference) == 2) {
 			return canCapture(row, col, board);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canThreaten(int row, int col, int[][] board) {
+		int rowDifference = row - this.getRow();
+		int colDifference = col - this.getCol();
+		
+		if(Math.abs(rowDifference) == 2 && Math.abs(colDifference) == 1) {
+			return true;
+		} else if (Math.abs(rowDifference) == 1 && Math.abs(colDifference) == 2) {
+			return true;
 		}
 		return false;
 	}

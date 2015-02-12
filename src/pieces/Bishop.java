@@ -13,13 +13,27 @@ public class Bishop extends ChessPiece {
 	@Override
 	public boolean canMoveTo(int row, int col, int[][] board) {
 		int rowDifference = row - this.getRow();
-		int colDifference = row - this.getCol();
+		int colDifference = col - this.getCol();
 		
-		if(rowDifference == 0 && colDifference == 0)
+		if(rowDifference == 0 || colDifference == 0)
 			return false;
 		
 		if(checkCollision(this.getRow(), this.getCol(), row, col, board))
 			return canCapture(row, col, board);
+		
+		return false;
+	}
+
+	@Override
+	public boolean canThreaten(int row, int col, int[][] board) {
+		int rowDifference = row - this.getRow();
+		int colDifference = col - this.getCol();
+		
+		if(rowDifference == 0 || colDifference == 0)
+			return false;
+		
+		if(checkCollision(this.getRow(), this.getCol(), row, col, board))
+			return true;
 		
 		return false;
 	}

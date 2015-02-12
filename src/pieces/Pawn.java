@@ -12,7 +12,7 @@ public class Pawn extends ChessPiece {
 	@Override
 	public boolean canMoveTo(int row, int col, int[][] board) {
 		int rowDifference = row - this.getRow();
-		int colDifference = row - this.getCol();
+		int colDifference = col - this.getCol();
 		int direction = this.getAlignmentDirection();
 		
 		if(colDifference == 0 && rowDifference == direction)
@@ -25,7 +25,20 @@ public class Pawn extends ChessPiece {
 		}
 		
 		if(Math.abs(colDifference) == 1 && rowDifference == direction) {
-			return this.canCapture(row, col, board);
+			if(board[row][col] != 0)
+				return this.canCapture(row, col, board);
+		}
+		//implement en passant later
+		return false;
+	}
+	
+	@Override
+	public boolean canThreaten(int row, int col, int[][] board) {
+		int rowDifference = row - this.getRow();
+		int colDifference = col - this.getCol();
+		int direction = this.getAlignmentDirection();
+		if(Math.abs(colDifference) == 1 && rowDifference == direction) {
+			return true;
 		}
 		//implement en passant later
 		return false;

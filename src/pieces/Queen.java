@@ -18,5 +18,10 @@ public class Queen extends ChessPiece {
 		return false;
 	}
 
+	@Override
+	public boolean canThreaten(int row, int col, int[][] board) {
+		return checkCollision(this.getRow(), this.getCol(), row, col, board);
+	}
+
 
 }
