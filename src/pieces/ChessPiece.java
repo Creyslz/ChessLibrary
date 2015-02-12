@@ -78,6 +78,7 @@ public abstract class ChessPiece {
 	}
 	
 	// Checks for the piece can move to the desired position on the board.
+	// Makes sure target location doesn't have an allied piece in the way.
 	public abstract boolean canMoveTo(int row, int col, int[][] board);
 	
 	// Check if the piece can threaten a position on the board. 

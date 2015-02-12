@@ -10,6 +10,7 @@ public class Bishop extends ChessPiece {
 		// TODO Auto-generated constructor stub
 	}
 
+	// Please see ChessPiece super class for descriptions of the following methods.
 	@Override
 	public boolean canMoveTo(int row, int col, int[][] board) {
 		int rowDifference = row - this.getRow();

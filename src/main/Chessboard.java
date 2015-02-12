@@ -112,6 +112,7 @@ public class Chessboard {
 		board[7][4] = -16;
 	}
 
+	// Simple getters for board dimensions
 	public int getMaxRows() {
 		return maxRows;
 	}
@@ -120,6 +121,7 @@ public class Chessboard {
 		return maxCols;
 	}
 
+	// Methods for checking if coordinates are within bounds.
 	public boolean checkBounds(int startRow, int startCol, int endRow, int endCol) {
 		if(startRow < 0 || startRow >= maxRows)
 			return false;
@@ -156,51 +158,45 @@ public class Chessboard {
 			return 4;
 		int pieceId = Math.abs(board[startRow][startCol]);
 		int pieceAlignment = (int) Math.signum(board[startRow][startCol]);
-
 		int targetId = Math.abs(board[endRow][endCol]);
-		//		int targetAlignment = (int) Math.signum(board[startRow][startCol]);
-
+		int targetAlignment = (int) Math.signum(board[endRow][endCol]);
 
 		if(pieceId == 0)
 			return 1;
 		if((pieceAlignment == -1 && currentMove % 1 == 0) || (pieceAlignment == 1 && currentMove % 1 == .5))
 			return 3;
-		ChessPiece movingPiece;
-		if(pieceAlignment == 1) {
-			movingPiece = whitePieces.get(pieceId-1);
-			if (movingPiece.canMoveTo(endRow, endCol, board)) {
-				if(targetId != 0){
-					blackPieces.get(targetId - 1).setAlive(false);
-				}
-				movingPiece.moveTo(endRow, endCol);
-				movingPiece.setLastTurnMoved(currentMove);
-				currentMove += .5;
-				board[endRow][endCol] = board[startRow][startCol];
-				board[startRow][startCol] = 0;
-				return 0;
+		
+		ChessPiece movingPiece = getPiece(pieceId, pieceAlignment);
+		if (!movingPiece.canMoveTo(endRow, endCol, board))
+			return 2;
+		setPieceDead(targetId, targetAlignment);
+		movingPiece.moveTo(endRow, endCol);
+		movingPiece.setLastTurnMoved(currentMove);
+		currentMove += .5;
+		board[endRow][endCol] = board[startRow][startCol];
+		board[startRow][startCol] = 0;
+		return 0;
+	}
 
-			} else {
-				return 2;
-			}
-		} else if (pieceAlignment == -1) {
-			movingPiece = blackPieces.get(pieceId-1);
-			if (movingPiece.canMoveTo(endRow, endCol, board)) {
-				if(targetId != 0){
-					whitePieces.get(targetId - 1).setAlive(false);
-				}
-				movingPiece.moveTo(endRow, endCol);
-				movingPiece.setLastTurnMoved(currentMove);
-				currentMove += .5;
-				board[endRow][endCol] = board[startRow][startCol];
-				board[startRow][startCol] = 0;
-				return 0;
+	// Set's a piece as not alive given it's id and alignment
+	// Safe to pass an id of 0
+	private void setPieceDead(int pieceId, int alignment) {
+		if(pieceId == 0)
+			return;
+		if(alignment == 1) 
+			whitePieces.get(pieceId - 1).setAlive(false);
+		if (alignment == -1) 
+			blackPieces.get(pieceId - 1).setAlive(false);
+	}
 
-			} else {
-				return 2;
-			}
-		}
-
-		return -1;
+	// returns the desired chess piece given its id and alignment
+	// returns null on fail.
+	private ChessPiece getPiece(int pieceId, int alignment) {
+		if(alignment == 1) 
+			return whitePieces.get(pieceId - 1);
+		if (alignment == -1) 
+			return blackPieces.get(pieceId - 1);
+		return null;
 	}
 
 	// Forcible piece movement that is used to debug purposes. Does no checking of move validity
@@ -257,6 +253,8 @@ public class Chessboard {
 		currentMove = move;
 	}
 
+	// returns the board in text format
+	// Used for debugging
 	public String printBoard() {
 		String output = "";
 		for(int row = maxRows-1; row >= 0; row --) {

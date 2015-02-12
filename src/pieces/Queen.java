@@ -9,6 +9,7 @@ public class Queen extends ChessPiece {
 		// TODO Auto-generated constructor stub
 	}
 
+	// Please see ChessPiece super class for descriptions of the following methods.
 	// Checks to see if target square is a valid move for the Queen.
 	// i.e along a horizontal, vertical, or diagonal and there are no pieces in the way.
 	@Override
