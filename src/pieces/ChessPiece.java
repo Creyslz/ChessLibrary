@@ -100,8 +100,8 @@ public abstract class ChessPiece {
 	}
 	
 	// Checks for pieces in between the start and end coordinates. Excludes start and end points.
-	// returns true on no collisions
-	//		   false on collisions, same start and end points, or bad input (movement not in an accepted direction e.g. (0,0) to (2,4))
+	// @return true on no collisions
+	// @return false on collisions, same start and end points, or bad input (movement not in an accepted direction e.g. (0,0) to (2,4))
 	public static boolean checkCollision(int startRow, int startCol, 
 										 int endRow, int endCol, int[][] board) {
 		int rowDifference = endRow - startRow;
@@ -127,6 +127,37 @@ public abstract class ChessPiece {
 		}
 				
 		return true;
+	}
+	
+	// Checks for number of pieces in between the start and end coordinates. Excludes start and end points.
+	// @return >= 0 on success
+	// @return -1 on bad input (movement not in an accepted direction e.g. (0,0) to (2,4))
+	public static int checkPiecesBetween(int startRow, int startCol, 
+										 int endRow, int endCol, int[][] board) {
+		int rowDifference = endRow - startRow;
+		int colDifference = endCol - startCol;
+		int rowDirection = (int) Math.signum(rowDifference);
+		int colDirection = (int) Math.signum(colDifference);
+		int piecesBetween = 0;
+		
+		if(rowDirection != 0 && colDirection != 0 
+				&& Math.abs(rowDifference) != Math.abs(colDifference))
+			return -1;
+		
+		if(rowDirection == 0 && colDirection == 0)
+			return -1;
+
+		int row = startRow + rowDirection;
+		int col = startCol + colDirection;
+		
+		while(row != endRow || col != endCol) {
+			if(board[row][col] != 0)
+				piecesBetween++;
+			row += rowDirection;
+			col += colDirection;
+		}
+				
+		return piecesBetween;
 	}
 	
 	// returns true if piece occupying target position is of the opposite color or position is empty
